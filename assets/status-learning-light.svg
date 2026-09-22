@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="198" height="32" viewBox="0 0 198 32" role="img" aria-label="在学 · Learning">
+  <rect width="198" height="32" rx="16" fill="#f6f8fa" stroke="#d0d7de" />
+  <circle cx="16" cy="16" r="4.5" fill="#9a6700" />
+  <text x="28" y="21" font-size="14" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans SC', 'Microsoft YaHei', sans-serif" fill="#57606a">在学 · Learning</text>
+</svg>

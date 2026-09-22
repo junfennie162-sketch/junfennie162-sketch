@@ -1,0 +1,5 @@
+*.png
+_preview.*
+_render*
+_shot*
+__pycache__/
