@@ -186,11 +186,115 @@ def status_badge(theme: str, label: str, color_key: str) -> str:
 '''
 
 
+def fetch_languages(user: str) -> tuple[dict[str, int], str]:
+    """按公开仓库的语言字节数汇总（默认跳过 fork），返回 ({语言: 字节}, 数据日期)。
+
+    联网拉 GitHub 公开接口（不需要令牌，6 个仓库 6 次请求，够用）；
+    拉不到就退回下面这份离线快照，保证脚本永远能跑。
+    """
+    import json
+    import urllib.request
+    from datetime import date
+
+    try:
+        api = f"https://api.github.com/users/{user}/repos?per_page=100"
+        req = urllib.request.Request(api, headers={"User-Agent": "profile-assets"})
+        with urllib.request.urlopen(req, timeout=20) as resp:
+            repos = json.load(resp)
+        names = [r["name"] for r in repos if not r.get("fork")]
+        totals: dict[str, int] = {}
+        for name in names:
+            req = urllib.request.Request(
+                f"https://api.github.com/repos/{user}/{name}/languages",
+                headers={"User-Agent": "profile-assets"})
+            with urllib.request.urlopen(req, timeout=20) as resp:
+                for lang, size in json.load(resp).items():
+                    totals[lang] = totals.get(lang, 0) + size
+        if totals:
+            return totals, date.today().isoformat()
+    except Exception as exc:  # 离线/限流都没关系，用快照
+        print(f"  [提示] 语言数据拉取失败（{type(exc).__name__}），改用离线快照")
+    return FALLBACK_LANGS, FALLBACK_LANG_DATE
+
+
+def langcard(theme: str, totals: dict[str, int], as_of: str, top: int = 6) -> str:
+    """语言构成卡：一条堆叠比例条 + 图例，数据来自公开仓库语言字节统计。"""
+    c = THEMES[theme]
+    ranked = sorted(totals.items(), key=lambda kv: -kv[1])
+    head, rest = ranked[:top], ranked[top:]
+    if rest:
+        head = head + [("其他 · Others", sum(v for _, v in rest))]
+    total = sum(v for _, v in head) or 1
+
+    w, h = 1200, 232
+    bar_x, bar_y, bar_w, bar_h = 56, 116, w - 112, 26
+    segs = []
+    legend = []
+    x = bar_x
+    for i, (lang, size) in enumerate(head):
+        frac = size / total
+        seg_w = bar_w * frac
+        color = LANG_COLORS.get(lang.split(" · ")[0], c["dim"])
+        segs.append(
+            f'<rect x="{x:.1f}" y="{bar_y}" width="{seg_w:.1f}" height="{bar_h}" '
+            f'fill="{color}" rx="{3 if i in (0, len(head) - 1) else 0}" />'
+        )
+        if frac >= 0.055:  # 太窄的段不写字，避免糊成一团
+            segs.append(
+                f'<text x="{x + seg_w / 2:.1f}" y="{bar_y + 18}" text-anchor="middle" '
+                f'font-size="12.5" font-family="{MONO}" fill="#ffffff" '
+                f'fill-opacity="0.92">{frac * 100:.1f}%</text>'
+            )
+        legend.append((lang, color, frac))
+        x += seg_w
+
+    legend_svg = []
+    lx = 56
+    for lang, color, frac in legend:
+        text = f"{lang} {frac * 100:.1f}%"
+        cw = 26 + len(text) * 8.4
+        legend_svg.append(
+            f'<rect x="{lx:.0f}" y="164" width="{cw:.0f}" height="28" rx="14" '
+            f'fill="{c["chip_bg"]}" stroke="{c["chip_border"]}" />'
+            f'<circle cx="{lx + 15:.0f}" cy="178" r="4.5" fill="{color}" />'
+            f'<text x="{lx + 26:.0f}" y="183" font-size="13" font-family="{MONO}" '
+            f'fill="{c["sub"]}">{esc(text)}</text>'
+        )
+        lx += cw + 10
+
+    return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" viewBox="0 0 {w} {h}" role="img" aria-label="语言构成">
+  <rect width="{w}" height="{h}" rx="14" fill="{c["bg"]}" stroke="{c["border"]}" />
+  <text x="56" y="62" font-size="22" font-weight="600" font-family="{MONO}" fill="{c["title"]}">Language Mix</text>
+  <text x="56" y="90" font-size="13.5" font-family="{MONO}" fill="{c["dim"]}">公开仓库语言字节占比（不含 fork）· 数据日期 {esc(as_of)}</text>
+  {"".join(segs)}
+  {"".join(legend_svg)}
+</svg>
+'''
+
+
+FALLBACK_LANG_DATE = "2026-09-22"
+FALLBACK_LANGS = {
+    "Python": 2418736, "Vue": 101841, "C++": 61928, "JavaScript": 20292,
+    "Batchfile": 21069, "CSS": 18385, "Shell": 18702, "PowerShell": 6791,
+    "HTML": 1254, "Java": 1655, "Hack": 767, "PHP": 374, "Dockerfile": 314,
+}
+LANG_COLORS = {
+    "Python": "#3776AB", "Vue": "#41B883", "C++": "#00599C", "JavaScript": "#E8B100",
+    "Batchfile": "#C1F12E", "CSS": "#663399", "Shell": "#89E051", "TypeScript": "#3178C6",
+    "Go": "#00ADD8", "PowerShell": "#5391FE", "HTML": "#E34F26", "Java": "#B07219",
+    "其他 · Others": "#8B949E", "Others": "#8B949E",
+}
+
+
 def main() -> None:
     ASSETS.mkdir(parents=True, exist_ok=True)
     written = []
 
+    langs, lang_date = fetch_languages("junfennie162-sketch")
+    print(f"  语言数据：{len(langs)} 种，日期 {lang_date}")
+
     for theme in ("light", "dark"):
+        written.append(("langcard-%s.svg" % theme, langcard(theme, langs, lang_date)))
         written.append(("banner-%s.svg" % theme, banner(
             theme,
             name="junfennie162-sketch",

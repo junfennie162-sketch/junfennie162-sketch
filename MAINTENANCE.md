@@ -13,6 +13,7 @@ preview.html                   本地预览素材：浏览器直接打开即可�
 assets/                        首页用的 SVG 素材（全部由脚本生成，别手改）
   banner-light.svg / banner-dark.svg        顶部头图
   terminal-light.svg / terminal-dark.svg    终端面板
+  langcard-light.svg / langcard-dark.svg    语言构成卡（脚本会联网拉真实字节数）
   status-*-light.svg / status-*-dark.svg    状态徽标（在做/已完成/在学）
 scripts/make_assets.py         生成上面这些 SVG 的脚本（改文字/配色就改这里）
 .github/workflows/snake.yml    每天自动更新贡献图贪吃蛇（推到 output 分支）
@@ -100,10 +101,11 @@ GitHub 的置顶**没有开放 API**，需要手动：打开 https://github.com/
 |---|---|---|
 | 技术栈小徽标 | `img.shields.io` | 极少挂；真挂了就删掉对应 `<img>` |
 | 社交图标 | `cdn.simpleicons.org` | 同上 |
-| 统计卡 / 语言卡 | `github-readme-stats.shion.dev` | 换回公共实例 `github-readme-stats.vercel.app`，或整段删掉（首页不靠它撑） |
 | 贪吃蛇 | `raw.githubusercontent.com/.../output/...` | 看仓库 Actions 里 `snake.yml` 那次运行为什么失败 |
 
-> 头图、终端面板、状态徽标都是**本地 SVG**，不依赖任何外部服务，永远都能显示。
+> 头图、终端面板、语言构成卡、状态徽标都是**本地 SVG**，不依赖任何外部服务，永远都能显示。
+> 语言构成卡里的数字是生成脚本当时拉到的真实字节数（卡上标了日期），
+> 语言占比变化后重跑 `python scripts/make_assets.py` 就会更新。
 
 ---
 

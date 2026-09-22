@@ -187,8 +187,8 @@
 
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://github-readme-stats.shion.dev/api/top-langs/?username=junfennie162-sketch&layout=compact&langs_count=6&bg_color=0d1117&title_color=58a6ff&text_color=e6edf3&border_color=30363d&border_radius=8" />
-    <img src="https://github-readme-stats.shion.dev/api/top-langs/?username=junfennie162-sketch&layout=compact&langs_count=6&bg_color=ffffff&title_color=0969da&text_color=1f2328&border_color=d1d9e0&border_radius=8" alt="主要语言" width="62%" />
+    <source media="(prefers-color-scheme: dark)" srcset="./assets/langcard-dark.svg" />
+    <img src="./assets/langcard-light.svg" alt="语言构成" width="82%" />
   </picture>
 </p>
 
