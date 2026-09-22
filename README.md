@@ -192,6 +192,12 @@
   </picture>
 </p>
 
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/junfennie162-sketch/junfennie162-sketch/output/github-contribution-grid-snake-dark.svg" />
+    <img src="https://raw.githubusercontent.com/junfennie162-sketch/junfennie162-sketch/output/github-contribution-grid-snake.svg" alt="贡献图" />
+  </picture>
+</p>
 
 ---
 
