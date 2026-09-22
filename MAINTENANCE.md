@@ -67,10 +67,10 @@ git add -A; git commit -m "更新首页素材"; git push
 gh auth refresh -h github.com -s user
 ```
 
-然后：
+然后（下面这句是按「主线 AI 安全」写的，可按自己口味改）：
 
 ```powershell
-gh api -X PATCH user -f bio="LLM 应用工程 · RAG / Agent / 安全工具链"
+gh api -X PATCH user -f bio="AI 安全（渗透测试 Agent / 钓鱼检测 / 漏洞挖掘）· 底层算子与推理加速在补课 · 中北大学"
 ```
 
 位置、网站同理（`-f location="太原"`、`-f blog="https://..."`）。

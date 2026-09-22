@@ -137,23 +137,24 @@ def terminal(theme: str, title: str, lines: list[tuple[str, str]]) -> str:
         y = top + i * line_h
         if kind == "cmd":
             body.append(
-                f'<text x="24" y="{y}" font-size="15" font-family="{MONO}" fill="{c["title"]}">'
+                f'<text x="24" y="{y}" font-size="15" font-family="{MONO}" fill="{c["title"]}" '
+                f'xml:space="preserve">'
                 f'<tspan fill="{c["ok"]}">$ </tspan>{esc(text)}</text>'
             )
         elif kind == "out":
             body.append(
                 f'<text x="40" y="{y}" font-size="15" font-family="{MONO}" '
-                f'fill="{c["sub"]}">{esc(text)}</text>'
+                f'fill="{c["sub"]}" xml:space="preserve">{esc(text)}</text>'
             )
         elif kind == "hl":
             body.append(
                 f'<text x="40" y="{y}" font-size="15" font-family="{MONO}" '
-                f'fill="{c["accent"]}">{esc(text)}</text>'
+                f'fill="{c["accent"]}" xml:space="preserve">{esc(text)}</text>'
             )
         else:  # comment
             body.append(
                 f'<text x="24" y="{y}" font-size="15" font-family="{MONO}" '
-                f'fill="{c["dim"]}">{esc(text)}</text>'
+                f'fill="{c["dim"]}" xml:space="preserve">{esc(text)}</text>'
             )
     cursor_y = top + len(lines) * line_h
     body.append(
@@ -298,8 +299,8 @@ def main() -> None:
         written.append(("banner-%s.svg" % theme, banner(
             theme,
             name="junfennie162-sketch",
-            tagline="RAG  ·  LLM AGENT  ·  SECURITY TOOLING",
-            chips=["Python", "FastAPI", "Vue 3", "PyTorch / SUPA", "Docker"],
+            tagline="AI SECURITY  ·  LLM AGENT  ·  OPERATOR & INFERENCE",
+            chips=["Python", "MCP / Agent", "PyTorch / SUPA", "FastAPI", "Docker"],
             radar_label="RECON",
         )))
         written.append(("terminal-%s.svg" % theme, terminal(
@@ -307,11 +308,12 @@ def main() -> None:
             title="junfennie162-sketch — zsh",
             lines=[
                 ("cmd", "whoami"),
-                ("out", "中北大学 · 翻斗花园 · LLM 应用 & 安全工具"),
+                ("out", "中北大学 · 翻斗花园 · AI 安全 / 算子与推理加速"),
                 ("cmd", "ls ~/projects --sort=size"),
-                ("hl", "textbook-exercise-rag/   教材习题解析生成器（RAG）"),
-                ("hl", "birensupa-spectralconv/  壁仞 SUPA 算子 + FNO-NS"),
-                ("hl", "corehacker/             AI 渗透测试框架"),
+                ("hl", "corehacker/              AI 渗透测试框架（多 Agent + MCP）"),
+                ("hl", "birensupa-spectralconv/  SUPA 算子 + FNO-NS"),
+                ("hl", "textbook-exercise-rag/   教材习题解析（RAG）"),
+                ("hl", "phish/                   MemoPhishAgent 复现评审"),
                 ("cmd", "python -m pytest -q"),
                 ("out", "158 passed"),
             ],
