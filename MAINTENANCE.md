@@ -59,14 +59,23 @@ git add -A; git commit -m "更新首页素材"; git push
 
 ### 3. 补资料页字段（名字 / 简介 / 位置 / 网站）
 
-首页左上角的简介来自**个人资料**，不在本仓库里。想补的话：
+首页左上角的简介来自**个人资料**，不在本仓库里。改简介要用带 `user` 权限的令牌，
+当前登录的令牌只有 `gist / read:org / repo`，所以先补权限（会弹一次浏览器授权，一次性）：
 
 ```powershell
-gh api -X PATCH /user -f bio="LLM 应用工程 · RAG / Agent / 安全工具链"
+gh auth refresh -h github.com -s user
+```
+
+然后：
+
+```powershell
+gh api -X PATCH user -f bio="LLM 应用工程 · RAG / Agent / 安全工具链"
 ```
 
 位置、网站同理（`-f location="太原"`、`-f blog="https://..."`）。
 改完打开 https://github.com/junfennie162-sketch 刷新就能看到。
+
+> 不想动令牌也行：网页 https://github.com/settings/profile 里手填，效果一样。
 
 ### 4. 置顶仓库（这个 API 改不了，只能网页点）
 
