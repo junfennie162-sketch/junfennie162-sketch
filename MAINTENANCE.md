@@ -82,14 +82,14 @@ gh api -X PATCH user -f bio="AI 安全（渗透测试 Agent / 钓鱼检测 / 漏
 
 GitHub 的置顶**没有开放 API**，需要手动：打开 https://github.com/junfennie162-sketch
 → 右侧 `Pinned` 区域右上角 **Customize your pins** → 勾选 6 个仓库 → Save。
-建议顺序（把最能打的两三个放最前面）：
+建议顺序（跟首页「主线 / 另一条线 / 工程底子」的排法保持一致）：
 
-1. `textbook-exercise-rag`（主力项目，工程完整度最高）
-2. `birensupa-spectralconv`（竞赛 + 有硬数字）
-3. `corehacker`
-4. `phish`
-5. `pentest-ai-knowledge`
-6. `AIxVuln`
+1. `corehacker`（主线：AI 安全工具，最完整）
+2. `phish`（钓鱼 URL 检测的复现与评审，有论文对照）
+3. `pentest-ai-knowledge`（★3，别人最容易用上）
+4. `birensupa-spectralconv`（另一条线：算子与推理加速，数字硬）
+5. `textbook-exercise-rag`（工程底子，链路最全）
+6. `AIxVuln`（fork，跟练记录）
 
 ---
 
